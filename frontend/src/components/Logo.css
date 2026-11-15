@@ -1,0 +1,10 @@
+
+.navbar-logo{
+    display: flex;
+}
+.navbar-logo h1{
+    display: flex;
+    align-items: center;
+    margin:0px;
+    font-size: 25px;
+}
