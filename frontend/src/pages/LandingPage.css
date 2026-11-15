@@ -55,6 +55,8 @@
 
 .login-button-main:hover{
     background-color: rgb(255, 244, 244);
+    border: 2px solid rgb(162, 32, 32);
+
 }
 
 .main-image{
