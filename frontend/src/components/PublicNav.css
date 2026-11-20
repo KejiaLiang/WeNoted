@@ -3,7 +3,7 @@
 .navbar{
     background-color: #69A47F;
     display: flex; 
-    min-height: 30px;
+    height:95px;
     padding: 20px 40px;
   
     justify-content: space-between;
