@@ -7,11 +7,11 @@ function PublicNav() {
 
         <nav className='navbar'>
 
-            <Logo /> 
+            <Link to='/' ><Logo /> </Link>
 
             <div className='navbar-links'> 
                 <Link to='/about'>About</Link>
-                <Link>How it works</Link>
+                <a href='/#how-it-works'>How it works</a>
                 <div className='auth-links'> 
                     <Link className='login-button' to='/login'>Login</Link>
                     <Link className='sign-up-button-nav' to='/sign-up'>Sign up</Link>

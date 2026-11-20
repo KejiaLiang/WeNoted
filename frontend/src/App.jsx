@@ -1,6 +1,17 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import LandingPage from './pages/LandingPage';
+import Landing from './pages/public/Landing';
+import Login from './pages/public/Login';
+import SignUp from './pages/public/SignUp';
+import About from './pages/public/About';
+
+import Browse from './pages/private/Browse';
+import MyNotes from './pages/private/MyNotes';
+import NotePage from './pages/private/NotePage';
+import SavedNotes from './pages/private/SavedNotes';
+import Upload from './pages/private/Upload';
+
+
 
 
 function App() {
@@ -10,16 +21,15 @@ function App() {
 
             <Routes>
 
-                <Route path='/' element={<LandingPage />} />
+            {/* PUBLIC PAGES */} 
 
-{/*
-                <Route path='/about' element={<About />} />
+                <Route path='/' element={<Landing />} />
                 <Route path='/login' element={<Login />} />
-                
                 <Route path='/sign-up' element={<SignUp />} /> 
-                
-              
-                */} 
+                <Route path='/about' element={<About />} />
+          
+          
+            {/* PRIVATE PAGES */} 
 
 
             </Routes>
