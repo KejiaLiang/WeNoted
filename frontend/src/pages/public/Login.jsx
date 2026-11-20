@@ -1,12 +1,18 @@
 import {Link} from 'react-router-dom';
 import './Login.css';
-import PrivateNav from '../../components/PrivateNav'; 
 import Footer from '../../components/Footer';
 
 function Login(){
     return(
-         <div>
-         
+         <div className='whole-page'>
+
+            <div className='main-content'>
+                {/* write here*/}
+            
+            </div>
+
+            
+            <Footer/>
         </div>
             
     );
