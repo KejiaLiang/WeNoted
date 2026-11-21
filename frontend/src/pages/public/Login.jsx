@@ -4,16 +4,13 @@ import Footer from '../../components/Footer';
 
 function Login(){
     return(
-         <div className='whole-page'>
-
-            <div className='main-content'>
-                {/* write here*/}
+ 
+        <div>
+            {/* write here*/}
             
-            </div>
-
-            
-            <Footer/>
         </div>
+
+ 
             
     );
 
