@@ -14,7 +14,9 @@
 
 
 }
-
+.hover-underline:hover{
+    text-decoration: underline;
+}
 
 .navbar img{
     width: 65px;

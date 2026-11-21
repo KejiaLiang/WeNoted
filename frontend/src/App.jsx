@@ -30,6 +30,11 @@ function App() {
           
           
             {/* PRIVATE PAGES */} 
+                <Route path='/upload' element={<Upload />} />
+                <Route path='/browse' element={<Browse />} />
+                <Route path='/my-notes' element={<MyNotes />} /> 
+                <Route path='/saved-notes' element={<SavedNotes />} />
+                <Route path='/note-page' element={<NotePage />} />
 
 
             </Routes>
