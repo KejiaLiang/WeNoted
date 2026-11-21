@@ -12,7 +12,7 @@ function Landing() {
             <PublicNav /> 
 
             {/*Main*/}
-            <div className='main-content'>
+            <div className='main-content' id='landing-page'>
                 <div className='landing-container'>
                     <div className='left-landing-container'> 
                         <h1 className='landing-header'>Share your class notes with other McGill students</h1>

@@ -1,8 +1,8 @@
 footer{
     background-color: #69A47F;
-    height: 125px;
+    height: 100px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding:50px;
     align-items: center;
     color: rgb(46, 46, 46);

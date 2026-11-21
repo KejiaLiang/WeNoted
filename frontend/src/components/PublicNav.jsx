@@ -13,10 +13,9 @@ function PublicNav() {
 
         <nav className='navbar'>
 
-            <Link to='/' ><Logo /> </Link>
+            <a href='/#landing-page' ><Logo /> </a>
 
             <div className='navbar-links'> 
-                <Link className='hover-underline' to='/about'>About</Link>
                 <a className='hover-underline' href='/#how-it-works'>How it works</a>
                 <div className='auth-links'> 
                     <Link className='login-button' to='/login'>Login</Link>
