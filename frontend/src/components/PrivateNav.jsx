@@ -30,6 +30,8 @@ function PrivateNav(){
                     </svg>
                     {/*<Link className='log-out-nav' to='/'>Logout</Link>*/}
             </div>
+
+            {/*HAMBURGER*/}
            
             <div className='private-navbar-hamburger' onClick={toggleSideMenu}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
