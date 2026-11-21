@@ -41,7 +41,7 @@
         top: 95px;
         right:0;
         width: 250px;
-        background-color:#CEE0D0;
+        background-color:#9DBEAA;
         display: flex;
         flex-direction: column;
         border-radius: 0 0 15px 15px;
@@ -54,7 +54,7 @@
     border:none; 
     height: 1.5px;
     width: 90%;
-    background-color: #A8BEAB;
+    background-color: #D0DED4;
     margin:8px auto 8px auto;
     
 }
@@ -86,7 +86,7 @@
     }
 
 .private-navbar-side-menu a:hover, .profile-menu a:hover{
-        background-color: #B6D0BA;
+        background-color: #789D88;
         border-radius: 15px;
 }
 
@@ -119,7 +119,7 @@
         top: 95px;
         right:0;
         width: 250px;
-        background-color:#CEE0D0;
+        background-color:#9DBEAA;
         display: flex;
         flex-direction: column;
         border-radius: 0 0 15px 15px;
