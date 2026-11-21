@@ -8,6 +8,9 @@
   
     justify-content: space-between;
     align-items: center;
+    position:fixed;
+    width:100%;
+
 
 
 }
@@ -64,4 +67,69 @@
 
 .sign-up-button-nav:hover{
     background-color: #FFC21A;
+}
+
+.public-navbar-hamburger, .public-navbar-side-menu{
+     display: none;   
+}
+
+
+@media screen and (max-width: 920px){
+    
+    .navbar-links {
+        display: none;
+
+    }
+
+
+
+    .public-navbar-hamburger{
+        display: block;
+    }
+
+    .public-navbar-hamburger:hover{
+        color:white;
+    }
+
+    /*displays when has both ID and class*/
+    .public-navbar-side-menu.active{
+        position: fixed;
+        top: 95px;
+        right:0;
+        width: 250px;
+        background-color:#CEE0D0;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0 0 15px 15px;
+        z-index: 100;
+        padding:8px;
+    
+
+    }
+
+    .public-navbar-side-menu a{
+        display: block;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .public-navbar-side-menu a{
+        font-size: 18px;
+    }
+   
+    .public-navbar-side-menu a:hover{
+        background-color: #B6D0BA;
+        border-radius: 15px;
+    }
+
+    .public-navbar-side-menu hr{
+        border:none; 
+        height: 1.5px;
+        width: 90%;
+        background-color: #A8BEAB;
+        margin:8px auto 8px auto;
+    
+}
+
+    
 }

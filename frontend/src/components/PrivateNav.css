@@ -1,11 +1,17 @@
+
+
 .private-navbar-links{
     display: flex;
     gap: 80px;
 
 }
 
-.private-navbar-links a,  .private-navbar-side-menu a{
+.private-navbar-links a{
     font-size: 20px;
+}
+
+.private-links-content a:hover{
+    text-decoration: underline;
 }
 
 .private-links-content{
@@ -13,6 +19,8 @@
     align-items: center;
     gap: 60px;
 }
+
+/*PROFILE styling*/
 
 .profile{
     background-color: white;
@@ -28,16 +36,72 @@
     background-color: rgb(218, 218, 218);
 }
 
+.profile-menu.active{
+        position: fixed;
+        top: 95px;
+        right:0;
+        width: 250px;
+        background-color:#CEE0D0;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0 0 15px 15px;
+        z-index: 100;
+        padding:8px;
+        
+}
 
-.private-navbar-hamburger, #private-navbar-side-menu{
+.profile-menu hr, .private-navbar-side-menu hr{
+    border:none; 
+    height: 1.5px;
+    width: 90%;
+    background-color: #A8BEAB;
+    margin:8px auto 8px auto;
+    
+}
+
+.navbar-credentials{
+    padding-left: 15px;
+
+}
+.navbar-credentials p{
+    margin:0px auto 4px  15px ;
+}
+
+.navbar-credentials h2{
+    margin-bottom: 4px;
+    margin: 10px auto 4px 5px;
+    font-size: 20px;
+}
+
+/* dropdown styling & also for smaller screen side menu*/
+.logout-navbar-side-menu:hover, .logout-navbar-profile-menu:hover{
+    color: red;
+    border-radius: 0 0 15px 15px;
+}
+
+.private-navbar-side-menu a, .profile-menu a{
+        display: block;
+        padding: 10px;
+        text-align: center;
+    }
+
+.private-navbar-side-menu a:hover, .profile-menu a:hover{
+        background-color: #B6D0BA;
+        border-radius: 15px;
+}
+
+.private-navbar-hamburger, .private-navbar-side-menu, .profile-menu{
      display: none;   
 }
 
+.private-navbar-side-menu a, .logout-navbar-profile-menu{
+    font-size: 18px;
+}
 
 
 @media screen and (max-width: 920px){
 
-    .full-navbar{
+    .full-navbar, .profile-menu.active{
         display: none;
     }
 
@@ -49,33 +113,24 @@
         color:white;
     }
 
-
-    #private-navbar-side-menu.private-navbar-side-menu{
+    /*Need both to display*/
+    .private-navbar-side-menu.active{
         position: fixed;
         top: 95px;
         right:0;
         width: 250px;
-        background-color: #69A47F;
+        background-color:#CEE0D0;
         display: flex;
         flex-direction: column;
         border-radius: 0 0 15px 15px;
+        z-index: 100;
+        padding:8px;
+   
+
+    }
+
     
 
-    }
 
-    .private-navbar-side-menu a{
-        display: block;
-        padding: 20px;
-        text-align: center;
-    }
 
-    .private-navbar-side-menu a:hover{
-        background-color: #81c69a;
-    }
-
-    .logout-navbar-side-menu:hover{
-        color: red;
-        border-radius: 0 0 15px 15px;
-
-    }
 }
