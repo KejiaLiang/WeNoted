@@ -1,0 +1,23 @@
+.wn-back { margin: 0 0 18px; }
+.wn-detail { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(305px, 1fr); gap: clamp(22px, 3vw, 48px); align-items: start; }
+.wn-reader { height: clamp(560px, 76vh, 900px); background: var(--pale); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.wn-reader object { width: 100%; height: 100%; display: block; }
+.wn-reader a { display: inline-block; margin: 20px; text-decoration: underline; }
+.wn-info { overflow-wrap: anywhere; }
+.wn-info h1 { font-size: clamp(1.9rem, 2.6vw, 2.5rem); margin: 10px 0; }
+.wn-description { line-height: 1.55; padding-top: 15px; }
+.wn-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+.wn-comments { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 20px; }
+.wn-comments textarea { width: 100%; min-height: 78px; resize: vertical; padding: 10px; border: 1px solid #a9bbaa; border-radius: 8px; scroll-margin-top: 110px; }
+.wn-comments form { margin: 12px 0; text-align: right; }
+.wn-comments form button { margin-top: 7px; }
+.wn-comments ol { list-style: none; padding: 0; }
+.wn-comments li { padding: 14px 0; border-top: 1px solid var(--line); }
+.wn-comments li div { display: flex; justify-content: space-between; gap: 10px; }
+.wn-comments time { color: var(--muted); font-size: .83rem; }
+.wn-comments li p { margin: 6px 0 0; line-height: 1.5; white-space: pre-wrap; }
+@media (max-width: 790px) {
+  .wn-detail { grid-template-columns: minmax(0, 1fr); }
+  .wn-reader { height: 55vh; min-height: 340px; }
+}
+.wn-count { margin-right: 12px; font-size: .88rem; color: var(--muted); }
