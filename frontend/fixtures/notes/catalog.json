@@ -1,0 +1,93 @@
+[
+  {
+    "id": "flexbox",
+    "title": "Lecture 5 — CSS Flexbox",
+    "course": "COMP 307",
+    "semester": "Fall 2026",
+    "section": "001",
+    "author": "Jane D.",
+    "published": "2026-11-20T16:00:00Z",
+    "description": "The main axis follows flex-direction. The cross axis runs perpendicular to it.",
+    "likeCount": 12,
+    "comments": [
+      {
+        "id": "c1",
+        "author": "Alex T.",
+        "text": "The axis diagram helped me remember which property to use.",
+        "created": "2026-11-21T15:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "midterm",
+    "title": "Midterm review sheet",
+    "course": "COMP 307",
+    "semester": "Fall 2026",
+    "section": "001",
+    "author": "Alex T.",
+    "published": "2026-11-18T16:00:00Z",
+    "description": "A browser sends a request, the web server routes it, and a handler returns a response.",
+    "likeCount": 31,
+    "comments": []
+  },
+  {
+    "id": "dom",
+    "title": "Lecture 6 — JavaScript and the DOM",
+    "course": "COMP 307",
+    "semester": "Fall 2026",
+    "section": "002",
+    "author": "Sam K.",
+    "published": "2026-11-17T16:00:00Z",
+    "description": "A click travels down the ancestor chain during capture, reaches its target, and then bubbles back up.",
+    "likeCount": 7,
+    "comments": []
+  },
+  {
+    "id": "forms",
+    "title": "PHP and forms",
+    "course": "COMP 307",
+    "semester": "Fall 2026",
+    "section": "001",
+    "author": "Jane D.",
+    "published": "2026-11-12T16:00:00Z",
+    "description": "A successful form control contributes a name and a value to the request.",
+    "likeCount": 5,
+    "comments": []
+  },
+  {
+    "id": "trees",
+    "title": "Binary search trees",
+    "course": "COMP 250",
+    "semester": "Fall 2026",
+    "section": "002",
+    "author": "Priya R.",
+    "published": "2026-11-10T16:00:00Z",
+    "description": "Every key in the left subtree precedes the root key. Every key in the right subtree follows it.",
+    "likeCount": 18,
+    "comments": []
+  },
+  {
+    "id": "react",
+    "title": "Lecture 8 — React state",
+    "course": "COMP 307",
+    "semester": "Fall 2026",
+    "section": "001",
+    "author": "Alex T.",
+    "published": "2026-11-05T16:00:00Z",
+    "description": "Props carry data into a component. State tracks values that change between renders.",
+    "likeCount": 9,
+    "comments": []
+  },
+  {
+    "id": "sorting",
+    "title": "Sorting algorithms",
+    "course": "COMP 250",
+    "semester": "Winter 2026",
+    "section": "001",
+    "author": "Sam K.",
+    "published": "2026-04-08T16:00:00Z",
+    "description": "Split a sequence into halves until each part has at most one element.",
+    "likeCount": 4,
+    "comments": []
+  }
+]
