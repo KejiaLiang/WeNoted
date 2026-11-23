@@ -1,4 +1,3 @@
-// Live requests rely on the server to authenticate the session and authorize each note.
 async function request(path, method = 'GET', body) {
   const response = await fetch('/api/notes' + path, {
     method,

@@ -1,4 +1,3 @@
-// Only loaded by Vite's explicit notes-preview development mode.
 import catalog from './catalog.json';
 
 const storageKey = id => 'wenoted:notes-preview:v1:' + id;

@@ -20,11 +20,13 @@ function Detail({ id, returnTo, jump }) {
 
   async function post(event) {
     event.preventDefault();
-    if (posting || !draft.trim()) return;
+    const text = draft.trim();
+    if (posting || !text) return;
     setPosting(true);
     setFeedback('');
     try {
-      update(await notesApi.comment(id, draft.trim()), 'comment');
+      const updated = await notesApi.comment(id, text);
+      update(updated, 'comment');
       setDraft('');
     } catch (reason) {
       setFeedback(handleError(reason));

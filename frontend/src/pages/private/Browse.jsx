@@ -14,15 +14,28 @@ export default function Browse() {
   const query = params.get('q') || '';
   const sort = params.get('sort') || 'newest';
   const notes = data || [];
+  const searchTerm = query.trim().toLowerCase();
   const filtered = notes.filter(note => {
     const matchesFilters = Object.keys(facets).every(key => !params.get(key) || note[key] === params.get(key));
     const words = [note.title, note.course, note.author, note.description].join(' ').toLowerCase();
-    return matchesFilters && words.includes(query.trim().toLowerCase());
-  }).sort((a, b) => (sort === 'liked' && b.likeCount - a.likeCount) || Date.parse(b.published) - Date.parse(a.published));
+    return matchesFilters && words.includes(searchTerm);
+  }).sort((a, b) => {
+    if (sort === 'liked' && a.likeCount !== b.likeCount) return b.likeCount - a.likeCount;
+    return Date.parse(b.published) - Date.parse(a.published);
+  });
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const page = Math.min(totalPages, Math.max(1, Number.parseInt(params.get('page'), 10) || 1));
   const visible = filtered.slice((page - 1) * perPage, page * perPage);
   const returnTo = '/browse' + (params.size ? '?' + params : '');
+  function onReaction(updated, kind) {
+    setActionError('');
+    update(updated, kind);
+  }
+
+  function onReactionError(error) {
+    setActionError(handleError(error));
+  }
+
   function change(key, value) {
     const next = new URLSearchParams(params);
     if (key !== 'page') next.delete('page');
@@ -62,10 +75,10 @@ export default function Browse() {
                   <h2>{note.title}</h2><p className="wn-meta">{note.author} · {dateLabel(note.published)}</p></div>
               </Link>
               <div className="wn-card-actions">
-                <Reaction kind="like" compact note={note} onUpdate={(updated, kind) => { setActionError(''); update(updated, kind); }} onError={e => setActionError(handleError(e))} />
+                <Reaction kind="like" compact note={note} onUpdate={onReaction} onError={onReactionError} />
                 <Link to={detail + '#comments'} state={{ returnTo }} className="wn-action compact" aria-label={note.commentCount + ' comments on ' + note.title}>
                   <Icon name="comment" />{note.commentCount}</Link>
-                <Reaction kind="save" compact note={note} onUpdate={(updated, kind) => { setActionError(''); update(updated, kind); }} onError={e => setActionError(handleError(e))} />
+                <Reaction kind="save" compact note={note} onUpdate={onReaction} onError={onReactionError} />
               </div>
             </article>;
           })}</div>}
