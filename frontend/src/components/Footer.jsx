@@ -5,7 +5,7 @@ function Footer(){
     return(
         <footer>
         
-        (c) 2026 Team Potato
+        <Link to = '/upload'>2026 Team Potato(c) </Link>
        
         </footer>
     );
