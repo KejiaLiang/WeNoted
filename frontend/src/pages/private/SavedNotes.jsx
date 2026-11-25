@@ -9,8 +9,8 @@ import { dateLabel, useNotes } from '../../notes/useNotes';
 import './SavedNotes.css';
 
 function SavedNotes(){
-    const [course, setCourse] = useState("All Courses");
-    const [semester, setSemester] = useState("All Semesters");
+    const [course, setCourse] = useState("all courses");
+    const [semester, setSemester] = useState("all semesters");
     const [sort, setSort] = useState("Most Recently Saved");
     const [courseOptions, setCourseOptions] = useState([]);
     const [semesterOptions, setSemesterOptions] = useState([]);
@@ -18,11 +18,8 @@ function SavedNotes(){
     // Set up course and semester options when the page loads
     useEffect(() => {
         async function loadOptions() {
-            const courses = await getCourseOptions();
-            const semesters = await getSemesterOptions();
-            
-            setCourseOptions(courses);
-            setSemesterOptions(semesters);
+            updateCourses();
+            updateSemesters();
         }
         loadOptions();
     }, []);
@@ -65,6 +62,28 @@ function SavedNotes(){
         return options;
     }
 
+    // Update course options according to the semester selected
+    async function updateCourses(){
+        const courses = await getCourseOptions();
+        setCourseOptions(courses);
+    }
+
+    // Update semester options according to the course selected
+    async function updateSemesters(){
+        const semesters = await getSemesterOptions();
+        setSemesterOptions(semesters);
+    }
+
+    async function handleCourseChange(course){
+        setCourse(course);
+        updateSemesters();
+    }
+
+    async function handleSemesterChange(semester){
+        setSemester(semester);
+        updateCourses();
+    }
+
     return(
         <div className='whole-page'>
             <NoteLayout>
@@ -78,19 +97,19 @@ function SavedNotes(){
 
                     <div className='field'>
                     <label>Course</label>
-                    <select name="course">
+                    <select name="course" onChange={(e) => {handleCourseChange(e.target.value);}}>
                         {listCourses()}
                     </select>
                     </div>
                     <div className='field'>
                     <label>Semester</label>
-                    <select name="semester">
+                    <select name="semester" onChange={(e) => {handleSemesterChange(e.target.value);}}>
                         {listSemesters()}
                     </select>
                     </div>
                     <div className='field'>
                     <label>Sort By</label>
-                    <select name="sort">
+                    <select name="sort" onChange={(e) => setSort(e.target.value)}>
                         <option value="Most Recently Saved">Most Recently Saved</option>
                         <option value="Most Recently Published">Most Recently Published</option>
                     </select>
