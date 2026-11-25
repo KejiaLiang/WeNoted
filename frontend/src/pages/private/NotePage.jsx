@@ -55,7 +55,7 @@ function Detail({ id, returnTo, jump }) {
           <a href={note.pdfUrl}>Open PDF</a>
         </object>
       </div>
-      <section className="wn-info"><p className="wn-course">{note.course} · {note.semester}{note.section && ' · Section ' + note.section}</p>
+      <section className="wn-info"><p className="wn-course">{note.course} · {note.semester}</p>
         <h1>{note.title}</h1><p className="wn-meta">{note.author} · {dateLabel(note.published)}</p>
         {note.description && <p className="wn-description">{note.description}</p>}
         <div className="wn-toolbar">
