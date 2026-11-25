@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import PrivateNav from '../../components/PrivateNav'; 
 import Footer from '../../components/Footer';
+import { Icon, NoteLayout, Reaction, Status } from '../../notes/NoteUI';
+import { dateLabel, useNotes } from '../../notes/useNotes';
 import './SavedNotes.css';
 
 function SavedNotes(){
@@ -41,7 +43,7 @@ function SavedNotes(){
     function getSemesterOptions(){
         // TODO: call db
         const semesters = ["Fall2026"];
-        const noSelection = ["All Courses"];
+        const noSelection = ["All Semesters"];
         return [...noSelection, ...semesters];
     }
 
@@ -65,33 +67,40 @@ function SavedNotes(){
 
     return(
         <div className='whole-page'>
-            <PrivateNav/>
+            <NoteLayout>
 
-            <div className='main-content'>
-                <header>Saved Notes</header>
+            <div className='content'>
+                <header><h1>Saved Notes</h1></header>
+
+                <div className='filters-and-notes'>
                 <aside className="saved-notes-filters">
                     <h2>Filters</h2>
+
+                    <div className='field'>
                     <label>Course</label>
                     <select name="course">
                         {listCourses()}
                     </select>
-                    <br></br>
+                    </div>
+                    <div className='field'>
                     <label>Semester</label>
                     <select name="semester">
                         {listSemesters()}
                     </select>
-                    <br></br>
+                    </div>
+                    <div className='field'>
                     <label>Sort By</label>
                     <select name="sort">
                         <option value="Most Recently Saved">Most Recently Saved</option>
                         <option value="Most Recently Published">Most Recently Published</option>
                     </select>
+                    </div>
                 </aside>
                 {/*TODO*/}
+                </div>
             </div>
 
-            
-            <Footer/>
+            </NoteLayout>
         </div>
         
     );
