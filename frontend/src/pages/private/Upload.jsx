@@ -6,7 +6,7 @@ import './Upload.css';
 
 function Upload(){
 
-    //right fct set left var
+    //right fct sets left var
     const [dragOver, setDragOver] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [alertMessage, setAlertMessage] = useState(null);
@@ -95,24 +95,52 @@ function Upload(){
         return (bytes / (1024 *1024)).toFixed(3) + " MB";
     }
 
+
+    //get ticket from localstorage
+    function getTicket(){
+        const ticket = localStorage.getItem("ticket"); 
+
+        if (!ticket){
+            return null;
+        }
+        
+        return ticket;
+    }
+
     //upload
     async function handleUpload(event){
         event.preventDefault();
+
+        //make sure to have pdf
         if (!selectedFile){
                     showAlert('Missing File');
                     return;
                 }
+        
 
+        //retrieve ticket 
+        const ticket = getTicket();
+        if (!ticket){
+            showAlert("File cannot be uploaded. Missing Ticket");
+            return;
+        }
+
+        
         const formData = new FormData(event.target);
 
         formData.append("file", selectedFile); //add to form
+        formData.append("ticket", ticket);
         // all input will be accessible as  req.body.title, req.body.semester,..etc but file is accessed as: req.file
-       
+       //ticket is req.body.ticket
         //send to server
-        const response = await fetch('http://localhost:5000/upload', {
+        const response = await fetch('/upload', {
             method: 'POST',
             body: formData
         })
+
+        if (!response.ok){
+            throw new Error(`Upload failed: ${response.status}`);
+        }
 
     }
 
@@ -151,7 +179,7 @@ function Upload(){
                     <label >Description (optional)</label>
                     
 
-                    <textarea className='upload-description-textarea'></textarea>
+                    <textarea name='description' className='upload-description-textarea'></textarea>
 
                     <label>PDF file</label>
 
@@ -203,6 +231,7 @@ function Upload(){
                     <p className='upload-restrictions'>PDF only, maximum 10MB</p>
 
                     <div className='upload-action-buttons'>
+
                         <Link to='/browse'><button className='upload-cancel-btn' type='button'>Cancel</button></Link>
                         <button className='upload-btn' type='submit'>Upload</button>
                     </div>
