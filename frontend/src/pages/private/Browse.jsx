@@ -4,7 +4,7 @@ import { Icon, NoteLayout, Reaction, Status } from '../../notes/NoteUI';
 import { dateLabel, useNotes } from '../../notes/useNotes';
 import './Browse.css';
 
-const facets = { course: 'Class', semester: 'Semester', section: 'Section' };
+const facets = { course: 'Class', semester: 'Semester' };
 const perPage = 6;
 
 export default function Browse() {
@@ -71,7 +71,7 @@ export default function Browse() {
             return <article className="wn-card" key={note.id}>
               <Link to={detail} state={{ returnTo }} className="wn-card-link">
                 <div className="wn-thumb">{note.previewUrl ? <img src={note.previewUrl} alt="" /> : <span>PDF</span>}</div>
-                <div className="wn-card-body"><p className="wn-course">{note.course} · {note.semester}{note.section && ' · ' + note.section}</p>
+                <div className="wn-card-body"><p className="wn-course">{note.course} · {note.semester}</p>
                   <h2>{note.title}</h2><p className="wn-meta">{note.author} · {dateLabel(note.published)}</p></div>
               </Link>
               <div className="wn-card-actions">

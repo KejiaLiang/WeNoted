@@ -38,7 +38,7 @@ adapt the request helper in `src/notes/api.js` if the team chooses another ticke
 | PUT or DELETE /api/notes/:id/save | Sets or clears the user's saved note. Returns saved and id |
 | POST /api/notes/:id/comments | Accepts a JSON text field. Returns id, comments and commentCount after insertion |
 
-A summary has id (string), title, course, semester, section, author, published
+A summary has id (string), title, course, semester, author, published
 (ISO timestamp), description, same-origin pdfUrl, optional previewUrl, liked,
 saved, likeCount and commentCount. Each comment has id, author, created (ISO
 timestamp) and text. Derive the author from the authenticated session. The PDF
