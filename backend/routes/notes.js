@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer'); // to process files!
-const db = require('./db');
+const db = require('../db');
 const router = express.Router();
 
 
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // UPLOAD NOTES
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/api/notes/upload', upload.single('file'), async (req, res) => {
     //to do: delete pdf if ticket not valid? 
    
      try{
@@ -44,16 +44,13 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             });
         }
 
-
         //upload file
         const email=  result[0].email
         const file = req.file;
-
         const title = req.body.title;
         const course = req.body.course;
         const semester = req.body.semester;
         const description = req.body.description; 
-
 
         const uploadResult = await db.query(
             `INSERT INTO notes (title, course_id, semester, publisher_email, filepath, description)
@@ -61,7 +58,10 @@ router.post('/upload', upload.single('file'), async (req, res) => {
               [title, course, semester, email, file.path, description]
         );
 
+        const note_id = uploadResult.insertId; //get the note_ID from the inserted record
+
         res.json({
+        note_id: note_id, 
         message: 'Successful'
     });
     
@@ -72,9 +72,16 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             error: 'Database error'
         });
     }
-
     
 });
+
+
+
+
+
+
+
+
 
 
 module.exports = router;

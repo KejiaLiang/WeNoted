@@ -3,6 +3,8 @@ import {useState} from 'react';
 import PrivateNav from '../../components/PrivateNav'; 
 import Footer from '../../components/Footer';
 import './Upload.css';
+import { useNavigate } from 'react-router-dom';
+
 
 function Upload(){
 
@@ -110,6 +112,7 @@ function Upload(){
     //upload
     async function handleUpload(event){
         event.preventDefault();
+        const navigate = useNavigate();
 
         //make sure to have pdf
         if (!selectedFile){
@@ -118,8 +121,8 @@ function Upload(){
                 }
         
 
-        //retrieve ticket 
-        const ticket = getTicket();
+        //retrieve ticket **********************************************
+        const ticket = '123' //getTicket();  ****************************************************
         if (!ticket){
             showAlert("File cannot be uploaded. Missing Ticket");
             return;
@@ -140,6 +143,13 @@ function Upload(){
 
         if (!response.ok){
             throw new Error(`Upload failed: ${response.status}`);
+        }
+
+        const result = await response.json(); 
+        const node_id = result.note_id;
+
+        if (result.message == 'Successful'){
+            navigate(`/notes/${note_id}`);
         }
 
     }
