@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import './PrivateNav.css';
 import Logo from './Logo'
 
@@ -90,8 +91,8 @@ function PrivateNav(){
             </div>
             <div className='private-navbar-side-menu' id='private-navbar-side-menu'>
                 <div className='navbar-credentials'>
-                    <h2>Name</h2>
-                    <p>Email</p>
+                    <h2>{first_name} {last_name}</h2>
+                    <p>{email}</p>
                 </div>
                 <hr></hr>
                 <Link to='/browse'>Browse</Link>

@@ -12,7 +12,7 @@ router.post('/getUser', async (req, res) => {
         const ticket = req.body.ticket; 
 
         const result = await db.query(
-        'SELECT email, first_name, last_name FROM users JOIN tickets on users.email = tickets.email WHERE tickets.ticket =?',
+        'SELECT users.email, first_name, last_name FROM users JOIN tickets ON users.email = tickets.email WHERE tickets.ticket = ?',
         [ticket]
     );
 
