@@ -1,0 +1,29 @@
+/*
+Feature owner: Yuqing Zhou
+Code in this file was mostly copied (with adjustments) 
+from Leon Song's Browse.css to keep the style consistent.
+*/
+
+header {
+    display: flex; align-items: center; 
+    justify-content: space-between; gap: 16px; margin-bottom: 28px; 
+}
+
+.filters-and-notes {
+    display: grid; grid-template-columns: minmax(190px, 210px) minmax(0, 1fr); 
+    gap: clamp(20px, 2.4vw, 38px); align-items: start;
+}
+
+.saved-notes-filters {
+    background: var(--pale); border-radius: 14px; 
+    padding: 21px; display: grid; gap: 16px;
+}
+
+.saved-notes-filters label, .field {
+    display: grid; gap: 6px; font-size: .88rem; font-weight: 700;
+}
+
+.saved-notes-filters select {
+    min-width: 0; width: 100%; min-height: 40px; background: white; 
+    border: 1px solid #a9bbaa; border-radius: 6px; padding: 6px 9px; font-weight: 400;
+}
