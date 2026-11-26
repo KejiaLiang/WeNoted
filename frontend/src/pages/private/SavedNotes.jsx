@@ -1,9 +1,9 @@
-// Feature owner: Yuqing Zhou
-// No AI used
+/*
+Feature owner: Yuqing Zhou
+This file reuses the note-card layout from Leon's Browse.jsx (between <section> and </section>). 
+*/
 import {Link} from 'react-router-dom';
 import {useState, useEffect} from 'react';
-import PrivateNav from '../../components/PrivateNav'; 
-import Footer from '../../components/Footer';
 import { Icon, NoteLayout, Reaction, Status } from '../../notes/NoteUI';
 import { dateLabel, useNotes } from '../../notes/useNotes';
 import './SavedNotes.css';
@@ -14,6 +14,10 @@ function SavedNotes(){
     const [sort, setSort] = useState("Most Recently Saved");
     const [courseOptions, setCourseOptions] = useState([]);
     const [semesterOptions, setSemesterOptions] = useState([]);
+    const [actionError, setActionError] = useState('');
+
+    // TODO: replace this with a db call
+    const {data, error, retry, update, handleError} = useNotes();
     
     // Set up course and semester options when the page loads
     useEffect(() => {
@@ -84,12 +88,40 @@ function SavedNotes(){
         updateCourses();
     }
 
+    function onReaction(updated, kind) {
+        setActionError('');
+        update(updated, kind);
+    }
+
+    function onReactionError(error) {
+        setActionError(handleError(error));
+    }
+
+    const savedNotes = (data || [])
+        .filter(note =>
+            (course === "all courses" ||
+                note.course.toLowerCase() === course) &&
+            (semester === "all semesters" ||
+                note.semester.toLowerCase() === semester)
+        )
+        .sort((a, b) => {
+            // TODO: split this into 2 cases based on input
+            return Date.parse(b.published) - Date.parse(a.published);
+        });
+
     return(
         <div className='whole-page'>
             <NoteLayout>
 
             <div className='content'>
-                <header><h1>Saved Notes</h1></header>
+                <header>
+                    <h1>Saved Notes</h1>
+                    {data && (
+                        <p role="status">
+                            {savedNotes.length} {savedNotes.length === 1 ? 'note' : 'notes'} saved:
+                        </p>
+                    )}
+                </header>
 
                 <div className='filters-and-notes'>
                 <aside className="saved-notes-filters">
@@ -97,25 +129,95 @@ function SavedNotes(){
 
                     <div className='field'>
                     <label>Course</label>
-                    <select name="course" onChange={(e) => {handleCourseChange(e.target.value);}}>
+                    <select name="course" value={course} onChange={(e) => {handleCourseChange(e.target.value);}}>
                         {listCourses()}
                     </select>
                     </div>
                     <div className='field'>
                     <label>Semester</label>
-                    <select name="semester" onChange={(e) => {handleSemesterChange(e.target.value);}}>
+                    <select name="semester" value={semester} onChange={(e) => {handleSemesterChange(e.target.value);}}>
                         {listSemesters()}
                     </select>
                     </div>
                     <div className='field'>
                     <label>Sort By</label>
-                    <select name="sort" onChange={(e) => setSort(e.target.value)}>
+                    <select name="sort" value={sort} onChange={(e) => setSort(e.target.value)}>
                         <option value="Most Recently Saved">Most Recently Saved</option>
                         <option value="Most Recently Published">Most Recently Published</option>
                     </select>
                     </div>
                 </aside>
-                {/*TODO*/}
+
+                <section aria-label="display-notes" className="display-notes">
+                    {actionError && <p role="alert">{actionError}</p>}
+
+                    {!data ? (
+                            <Status error={error} retry={retry} />
+                        ) : savedNotes.length === 0 ? (
+                            <div className="status">
+                                <h2>No saved notes found</h2>
+                            </div>
+                        ) : (
+                            <div className='grid'>
+                                {savedNotes.map(note => {
+                                    const detail = '/note-page?id=' + encodeURIComponent(note.id);
+
+                                    return (
+                                        <article className="wn-card" key={note.id}>
+                                            <Link to={detail} className="wn-card-link">
+                                                <div className="wn-thumb">
+                                                    {note.previewUrl
+                                                        ? <img src={note.previewUrl} alt="" />
+                                                        : <span>PDF</span>
+                                                    }
+                                                </div>
+
+                                                <div className="wn-card-body">
+                                                    <p className="wn-course">
+                                                        {note.course} · {note.semester}
+                                                        {note.section && ' · ' + note.section}
+                                                    </p>
+
+                                                    <h2>{note.title}</h2>
+
+                                                    <p className="wn-meta">
+                                                        {note.author} · {dateLabel(note.published)}
+                                                    </p>
+                                                </div>
+                                            </Link>
+
+                                            <div className="wn-card-actions">
+                                                <Reaction
+                                                    kind="like"
+                                                    compact
+                                                    note={note}
+                                                    onUpdate={onReaction}
+                                                    onError={onReactionError}
+                                                />
+
+                                                <Link
+                                                    to={detail + '#comments'}
+                                                    className="wn-action compact"
+                                                    aria-label={note.commentCount + ' comments on ' + note.title}
+                                                >
+                                                    <Icon name="comment" />
+                                                    {note.commentCount}
+                                                </Link>
+
+                                                <Reaction
+                                                    kind="save"
+                                                    compact
+                                                    note={note}
+                                                    onUpdate={onReaction}
+                                                    onError={onReactionError}
+                                                />
+                                            </div>
+                                        </article>
+                                    );
+                                })}
+                            </div>
+                        )}
+                </section>
                 </div>
             </div>
 
