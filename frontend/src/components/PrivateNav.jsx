@@ -4,14 +4,45 @@ import Logo from './Logo'
 
 
 function PrivateNav(){
+
+    const [email, setEmail] = useState(null);
+    const [first_name, setFirstName] = useState(null);
+    const [last_name, setLastName] = useState(null);
+
+    useEffect(() => {
+    getCredentials();
+    }, []);
+
     function toggleMenu(menuId){
         const menu = document.getElementById(menuId);
         
         menu.classList.toggle('active');
     }
 
+    //get email + name
+    async function getCredentials(){
+        //const ticket= localStorage.getItem('ticket'); ********************
+        const ticket= '123';
 
+        const response = await fetch('/api/auth/getUser', {
+            method: "POST",
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ticket})
+        })
 
+        if (!response.ok){
+            throw new Error(`Auth failed: ${response.status}`);
+        }
+
+        const user = await response.json();
+
+        setEmail(user.email); 
+        setFirstName(user.first_name);
+        setLastName(user.last_name);
+
+    }
     
 
     return(
@@ -41,8 +72,8 @@ function PrivateNav(){
             <div className='profile-menu' id='profile-menu'>
             
                 <div className='navbar-credentials'>
-                    <h2>Name</h2>
-                    <p>Email</p>
+                    <h2>{first_name} {last_name}</h2>
+                    <p>{email}</p>
                 </div>
                 <hr></hr>
                 <Link className='logout-navbar-profile-menu' to='/'>Log Out</Link>
