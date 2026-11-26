@@ -138,7 +138,7 @@ function Upload(){
         // all input will be accessible as  req.body.title, req.body.semester,..etc but file is accessed as: req.file
        //ticket is req.body.ticket
         //send to server
-        const response = await fetch('/upload', {
+        const response = await fetch('/api/notes/upload', {
             method: 'POST',
             body: formData
         })
