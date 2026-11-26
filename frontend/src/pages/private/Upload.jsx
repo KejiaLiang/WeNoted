@@ -151,7 +151,7 @@ function Upload(){
         const note_id = result.note_id;
 
         if (result.message == 'Successful'){
-            navigate(`/notes/${note_id}`);
+            navigate(`/note-page/${note_id}`);
         }
 
     }
