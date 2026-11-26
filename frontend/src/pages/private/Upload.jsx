@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 
 function Upload(){
 
+    const navigate = useNavigate();
+
+
     //right fct sets left var
     const [dragOver, setDragOver] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -112,7 +115,6 @@ function Upload(){
     //upload
     async function handleUpload(event){
         event.preventDefault();
-        const navigate = useNavigate();
 
         //make sure to have pdf
         if (!selectedFile){
@@ -146,7 +148,7 @@ function Upload(){
         }
 
         const result = await response.json(); 
-        const node_id = result.note_id;
+        const note_id = result.note_id;
 
         if (result.message == 'Successful'){
             navigate(`/notes/${note_id}`);
