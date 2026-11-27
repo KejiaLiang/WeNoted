@@ -67,6 +67,13 @@ function SavedNotes(){
             cache: 'no-store'
         })
 
+        // debug
+        console.log("Status:", response.status);
+        console.log("Content-Type:", response.headers.get("content-type"));
+        const text = await response.text();
+        console.log("Response:", text);
+        // debug
+
         if (!response.ok){
             throw new Error(`Failed to get saved notes: ${response.status}`);
         }
