@@ -92,6 +92,7 @@ function Upload(){
         showSuccessfulMessage('File successfully added');
     }
 
+    //return size of file in KB or MB
     function formatFileSize(bytes){
         if (bytes < 1024 * 1024) {
             return (bytes / 1024).toFixed(1) + " KB";
@@ -151,7 +152,7 @@ function Upload(){
         const note_id = result.note_id;
 
         if (result.message == 'Successful'){
-            navigate(`/note-page/${note_id}`);
+            navigate(`/note-page?id=${note_id}`);
         }
 
     }
