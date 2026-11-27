@@ -14,6 +14,7 @@ function PrivateNav(){
     const [first_name, setFirstName] = useState(null);
     const [last_name, setLastName] = useState(null);
 
+    //runs when loaded. if not authorized user, then will redirect to login
     useEffect(() => {
     getCredentials();
     }, []);
@@ -40,7 +41,8 @@ function PrivateNav(){
         })
 
         if (!response.ok){
-            throw new Error(`Auth failed: ${response.status}`);
+            navigate('/login');
+            return;
         }
 
         const user = await response.json();
@@ -56,6 +58,8 @@ function PrivateNav(){
 
 
     async function logout(){
+
+        
         //const ticket= localStorage.getItem('ticket'); ********************
         const ticket= '123';
         try{
@@ -114,7 +118,7 @@ function PrivateNav(){
                     <p>{email}</p>
                 </div>
                 <hr></hr>
-                <Link className='logout-navbar-profile-menu' onClick={logout}>Log Out</Link>
+                <Link className='logout-navbar-profile-menu'  to='/'  onClick={(event) => {event.preventDefault(); logout();}}>Log Out</Link>
 
             </div>
 
@@ -138,7 +142,7 @@ function PrivateNav(){
                 <Link to='/my-notes'>My Notes</Link>
                 <hr></hr>
                                
-                <Link className='logout-navbar-side-menu' onClick={logout}>Log Out</Link>
+                <Link className='logout-navbar-side-menu' to='/'  onClick={(event) => {event.preventDefault(); logout();}}>Log Out</Link>
             </div>
             
         
