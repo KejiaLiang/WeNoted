@@ -2,9 +2,13 @@ import {Link} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './PrivateNav.css';
 import Logo from './Logo'
+import { useNavigate } from 'react-router-dom';
 
 
 function PrivateNav(){
+
+    const navigate = useNavigate();
+
 
     const [email, setEmail] = useState(null);
     const [first_name, setFirstName] = useState(null);
@@ -25,6 +29,8 @@ function PrivateNav(){
         //const ticket= localStorage.getItem('ticket'); ********************
         const ticket= '123';
 
+        try {
+
         const response = await fetch('/api/auth/getUser', {
             method: "POST",
             headers: {
@@ -42,6 +48,37 @@ function PrivateNav(){
         setEmail(user.email); 
         setFirstName(user.first_name);
         setLastName(user.last_name);
+        }catch(error){
+            console.error(error);
+        }
+
+    }
+
+
+    async function logout(){
+        //const ticket= localStorage.getItem('ticket'); ********************
+        const ticket= '123';
+        try{
+            const response = await fetch('/api/auth/logout', {
+            method: "POST",
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ticket})
+        })
+
+            if (!response.ok){
+                throw new Error(`Logout failed: ${response.status}`);
+            }
+
+            localStorage.removeItem('ticket');
+
+            navigate('/');
+        }catch(error){
+            console.error(error);
+        }
+        
+
 
     }
     
@@ -77,7 +114,7 @@ function PrivateNav(){
                     <p>{email}</p>
                 </div>
                 <hr></hr>
-                <Link className='logout-navbar-profile-menu' to='/'>Log Out</Link>
+                <Link className='logout-navbar-profile-menu' onClick={logout}>Log Out</Link>
 
             </div>
 
@@ -101,7 +138,7 @@ function PrivateNav(){
                 <Link to='/my-notes'>My Notes</Link>
                 <hr></hr>
                                
-                <Link className='logout-navbar-side-menu' to='/'>Log Out</Link>
+                <Link className='logout-navbar-side-menu' onClick={logout}>Log Out</Link>
             </div>
             
         
