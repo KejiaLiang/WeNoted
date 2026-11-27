@@ -17,8 +17,8 @@ router.post('/getUser', async (req, res) => {
     );
 
         if (result.length === 0) {
-            return res.status(404).json({
-                error: 'User not found'
+            return res.status(401).json({
+                error: 'Unauthorized'
             });
         }
 

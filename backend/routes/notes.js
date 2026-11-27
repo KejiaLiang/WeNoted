@@ -39,8 +39,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     );
 
         if (result.length === 0) {
-            return res.status(404).json({
-                error: 'Ticket not found'
+            return res.status(401).json({
+                error: 'Unauthorized'
             });
         }
 
