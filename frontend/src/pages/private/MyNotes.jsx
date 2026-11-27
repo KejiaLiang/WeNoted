@@ -251,7 +251,7 @@ function MyNotes(){
                         ) : (
                             <div className='grid'>
                                 {myNotes.map(note => {
-                                    const detail = '/note-page?id=' + encodeURIComponent(note.id);
+                                    const detail = '/note-page?id=' + encodeURIComponent(note_id);
 
                                     return (
                                         <article className="card" key={note_id}>
@@ -265,14 +265,13 @@ function MyNotes(){
 
                                                 <div className="card-body">
                                                     <p className="course">
-                                                        {note.course} · {note.semester}
-                                                        {note.section && ' · ' + note.section}
+                                                        {note.course_id} · {note.semester}
                                                     </p>
 
                                                     <h2>{note.title}</h2>
 
                                                     <p className="meta">
-                                                        {note.author} · {dateLabel(note.publish_time)}
+                                                        {note.publisher_fname} {note.publisher_lname} · {dateLabel(note.publish_time)}
                                                     </p>
                                                 </div>
                                             </Link>
