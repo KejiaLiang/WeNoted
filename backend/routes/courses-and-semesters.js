@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('../db');
 const router = express.Router();
 
-// Get course options for saved notes by email and selected semester (by Yuqing Zhou)
+// Get course options for saved notes by email and selected semester
 router.get('/getCoursesForSavedNotes', async (req, res) => {
     try {
         const email = req.query.email;
@@ -53,7 +53,7 @@ router.get('/getCoursesForSavedNotes', async (req, res) => {
     }
 });
 
-// Get semester options for saved notes by email and selected course (by Yuqing Zhou)
+// Get semester options for saved notes by email and selected course
 router.get('/getSemestersForSavedNotes', async (req, res) => {
     try {
         const email = req.query.email;

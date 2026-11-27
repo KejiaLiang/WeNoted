@@ -17,6 +17,19 @@ app.use('/api/notes', notesRoutes);
 app.use('/api/auth', userRoutes); 
 app.use('/api/courses-and-semesters', coursesSemestersRoute);
 
+// debug
+app.get('/api/test-get', (req, res) => {
+    res.json({ message: 'GET works!' });
+});
+// debug
+
+// Handle unmatched API requests
+app.use('/api', (req, res) => {
+    res.status(404).json({
+        error: 'API route not found',
+        path: req.originalUrl
+    });
+});
 
 //serve react 
 const buildpath = path.join(__dirname, '../frontend/dist');

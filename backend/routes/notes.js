@@ -75,7 +75,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     
 });
 
-// Get Saved Notes by Email (by Yuqing Zhou)
+// Get Saved Notes by Email
 router.get('/saved-notes', async (req, res) => {
     try {
         const email = req.query.email;
@@ -103,8 +103,7 @@ router.get('/saved-notes', async (req, res) => {
             FROM notes n 
             INNER JOIN saves s ON n.note_id = s.note_id
             LEFT JOIN users u ON u.email = n.publisher_email
-            WHERE email = ?
-            )
+            WHERE s.email = ?
             `, 
             [email]
         );
