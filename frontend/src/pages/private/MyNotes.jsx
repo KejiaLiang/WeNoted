@@ -254,7 +254,7 @@ function MyNotes(){
                                     const detail = '/note-page?id=' + encodeURIComponent(note.id);
 
                                     return (
-                                        <article className="card" key={note.id}>
+                                        <article className="card" key={note_id}>
                                             <Link to={detail} className="card-link">
                                                 <div className="thumb">
                                                     {note.previewUrl
@@ -272,7 +272,7 @@ function MyNotes(){
                                                     <h2>{note.title}</h2>
 
                                                     <p className="meta">
-                                                        {note.author} · {dateLabel(note.published)}
+                                                        {note.author} · {dateLabel(note.publish_time)}
                                                     </p>
                                                 </div>
                                             </Link>
