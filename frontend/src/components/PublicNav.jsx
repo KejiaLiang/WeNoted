@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import './PublicNav.css';
 import Logo from './Logo'
+import { useEffect, useRef } from 'react';
 
 function PublicNav() {
 
@@ -9,6 +10,32 @@ function PublicNav() {
         
         menu.classList.toggle('active');
     }
+
+    const previousWidth = useRef(window.innerWidth > 920);
+
+    useEffect(() => {
+        function handleResize() {
+            const currentWidth = window.innerWidth > 920;
+
+            if (currentWidth !== previousWidth.current) {
+                if (currentWidth) {
+                    document.getElementById('public-navbar-side-menu')
+                        ?.classList.remove('active');
+                }
+
+                previousWidth.current = currentWidth;
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+
+
     return ( 
 
         <nav className='navbar'>
@@ -33,7 +60,6 @@ function PublicNav() {
                 <Link className='sign-up-side-menu' to='/sign-up'>Sign up</Link>
                 <Link to='/login'>Login</Link>
                 <hr></hr>
-                <Link to='/about'>About</Link>
                 <a href='/#how-it-works' onClick={() => toggleMenu('public-navbar-side-menu')}>How it works</a>
             </div>
             
