@@ -10,10 +10,12 @@ app.use(express.json());
 //Import routes
 const notesRoutes = require('./routes/notes');
 const userRoutes = require('./routes/users');
+const coursesSemestersRoute = require('./routes/courses-and-semesters');
 
 //register routes
 app.use('/api/notes', notesRoutes); 
 app.use('/api/auth', userRoutes); 
+app.use('/api/courses-and-semesters', coursesSemestersRoute);
 
 
 //serve react 

@@ -111,7 +111,7 @@ router.get('/saved-notes', async (req, res) => {
 
         res.status(200).json(result);
 
-    }catch {
+    }catch (error) {
         console.error(error);
 
         res.status(500).json({

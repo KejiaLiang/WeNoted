@@ -26,9 +26,9 @@ function SavedNotes(){
         async function loadOptions() {
             try {
             const userEmail = await getCredentials();
-            getSavedNotes(userEmail);
-            updateCourses();
-            updateSemesters();
+            await getSavedNotes(userEmail);
+            await updateCourses(userEmail, "all semesters");
+            await updateSemesters(userEmail, "all courses");
             } catch (error) {
             console.error(error);
             setActionError(error.message);
@@ -57,7 +57,7 @@ function SavedNotes(){
 
         setEmail(user.email);
 
-        return email;
+        return user.email;
     }
 
     // Get all saved notes
@@ -72,27 +72,53 @@ function SavedNotes(){
 
         const notes = await response.json();
 
+        setData(notes);
+
         return notes;
     }
 
     // Get from the database the courses that the saved notes have
     //  + an "all courses" option. 
     // Subjected to selected semester. 
-    function getCourseOptions(){
-        // TODO: call db
-        const courses = ["Comp307"];
-        const noSelection = ["All Courses"];
-        return [...noSelection, ...courses];
+    async function getCourseOptions(email, semester){
+        const response = await fetch(`/api/courses-and-semesters/getCoursesForSavedNotes?email=${encodeURIComponent(email)}&semester=${encodeURIComponent(semester)}`, {
+            method: 'GET',
+        })
+
+        if (!response.ok){
+            throw new Error(`Failed to get course options: ${response.status}`);
+        }
+
+        const courses = await response.json();
+
+        const noSelection = ["all courses"];
+
+        return [
+        ...noSelection,
+        ...courses.map(item => item.course_id)
+        ];
     }
 
     // Get from the database the semesters that the saved notes have
     //  + an "all semesters" option.
     // Subjected to selected course.
-    function getSemesterOptions(){
-        // TODO: call db
-        const semesters = ["Fall2026"];
-        const noSelection = ["All Semesters"];
-        return [...noSelection, ...semesters];
+    async function getSemesterOptions(email, course){
+        const response = await fetch(`/api/courses-and-semesters/getSemestersForSavedNotes?email=${encodeURIComponent(email)}&course=${encodeURIComponent(course)}`, {
+            method: 'GET',
+        })
+
+        if (!response.ok){
+            throw new Error(`Failed to get course options: ${response.status}`);
+        }
+
+        const semesters = await response.json();
+
+        const noSelection = ["all semesters"];
+
+        return [
+        ...noSelection,
+        ...semesters.map(item => item.semester)
+        ];
     }
 
     // Create course options in html
@@ -114,25 +140,33 @@ function SavedNotes(){
     }
 
     // Update course options according to the semester selected
-    async function updateCourses(){
-        const courses = await getCourseOptions();
-        setCourseOptions(courses);
+    async function updateCourses(email, semester){
+        try {
+            const courses = await getCourseOptions(email, semester);
+            setCourseOptions(courses);
+        } catch (error) {
+            setActionError(error.message);
+        }
     }
 
     // Update semester options according to the course selected
-    async function updateSemesters(){
-        const semesters = await getSemesterOptions();
-        setSemesterOptions(semesters);
+    async function updateSemesters(email, course){
+        try {
+            const semesters = await getSemesterOptions(email, course);
+            setSemesterOptions(semesters);
+        } catch (error) {
+            setActionError(error.message);
+        }
     }
 
     async function handleCourseChange(course){
         setCourse(course);
-        updateSemesters();
+        updateSemesters(email, course);
     }
 
     async function handleSemesterChange(semester){
         setSemester(semester);
-        updateCourses();
+        updateCourses(email, semester);
     }
 
     function onReaction(updated, kind) {
@@ -146,10 +180,10 @@ function SavedNotes(){
 
     const savedNotes = (data || [])
         .filter(note =>
-            (course === "all courses" ||
-                note.course.toLowerCase() === course_id) &&
-            (semester === "all semesters" ||
-                note.semester.toLowerCase() === semester)
+            (course.toLowerCase() === "all courses" ||
+                note.course_id.toLowerCase() === course.toLowerCase()) &&
+            (semester.toLowerCase() === "all semesters" ||
+                note.semester.toLowerCase() === semester.toLowerCase())
         )
         .sort((a, b) => {
         if (sort === "Most Recently Saved") {
@@ -164,6 +198,7 @@ function SavedNotes(){
         });
     
     // TODO: handle likes and comments
+    // TODO: page numbers and other formatting issues
 
     return(
         <div className='whole-page'>
@@ -174,7 +209,7 @@ function SavedNotes(){
                     <h1>Saved Notes</h1>
                     {data && (
                         <p role="status">
-                            {savedNotes.length} {savedNotes.length === 1 ? 'note' : 'notes'} saved:
+                            {savedNotes.length} {savedNotes.length === 1 ? 'note' : 'notes'} saved
                         </p>
                     )}
                 </header>
@@ -207,68 +242,65 @@ function SavedNotes(){
                 <section aria-label="display-notes" className="display-notes">
                     {actionError && <p role="alert">{actionError}</p>}
 
-                    {!data ? (
-                            <Status error={error} retry={retry} />
-                        ) : savedNotes.length === 0 ? (
-                            <div className="status">
-                                <h2>No saved notes found</h2>
-                            </div>
-                        ) : (
-                            <div className='grid'>
-                                {savedNotes.map(note => {
-                                    const detail = '/note-page?id=' + encodeURIComponent(note.note_id);
+                    {savedNotes.length === 0 ? (
+                        <div className="status">
+                            <h2>No saved notes found</h2>
+                        </div>
+                    ) : (
+                        <div className='grid'>
+                            {savedNotes.map(note => {
+                                const detail = '/note-page?id=' + encodeURIComponent(note.note_id);
+                                return (
+                                    <article className="card" key={note.note_id}>
+                                        <Link to={detail} className="card-link">
+                                            <div className="thumb">
+                                                {note.previewUrl
+                                                    ? <img src={note.previewUrl} alt="" />
+                                                    : <span>PDF</span> // TODO: fix thumbnail
+                                                }
+                                            </div>
 
-                                    return (
-                                        <article className="card" key={note.note_id}>
-                                            <Link to={detail} className="card-link">
-                                                <div className="thumb">
-                                                    {note.previewUrl
-                                                        ? <img src={note.previewUrl} alt="" />
-                                                        : <span>PDF</span> // TODO: fix thumbnail
-                                                    }
-                                                </div>
+                                            <div className="card-body">
+                                                <p className="course">
+                                                    {note.course_id} · {note.semester}
+                                                </p>
 
-                                                <div className="card-body">
-                                                    <p className="course">
-                                                        {note.course_id} · {note.semester}
-                                                    </p>
+                                                <h2>{note.title}</h2>
 
-                                                    <h2>{note.title}</h2>
+                                                <p className="meta">
+                                                    {note.publisher_fname} {note.publisher_lname} · {dateLabel(note.publish_time)}
+                                                </p>
+                                            </div>
+                                        </Link>
 
-                                                    <p className="meta">
-                                                        {note.publisher_fname} {note.publisher_lname} · {dateLabel(note.publish_time)}
-                                                    </p>
-                                                </div>
+                                        <div className="card-actions">
+                                            <Reaction
+                                                kind="like"
+                                                compact
+                                                note={note}
+                                                onUpdate={onReaction}
+                                                onError={onReactionError}
+                                            />
+
+                                            <Link
+                                                to={detail + '#comments'}
+                                                className="action compact"
+                                                aria-label={'Comments on ' + note.title}
+                                            >
+                                                <Icon name="comment" />
                                             </Link>
 
-                                            <div className="card-actions">
-                                                <Reaction
-                                                    kind="like"
-                                                    compact
-                                                    note={note}
-                                                    onUpdate={onReaction}
-                                                    onError={onReactionError}
-                                                />
-
-                                                <Link
-                                                    to={detail + '#comments'}
-                                                    className="action compact"
-                                                    aria-label={'Comments on ' + note.title}
-                                                >
-                                                    <Icon name="comment" />
-                                                </Link>
-
-                                                <Reaction
-                                                    kind="save"
-                                                    compact
-                                                    note={note}
-                                                    onUpdate={onReaction}
-                                                    onError={onReactionError}
-                                                />
-                                            </div>
-                                        </article>
-                                    );
-                                })}
+                                            <Reaction
+                                                kind="save"
+                                                compact
+                                                note={note}
+                                                onUpdate={onReaction}
+                                                onError={onReactionError}
+                                            />
+                                        </div>
+                                    </article>
+                                );
+                            })}
                             </div>
                         )}
                 </section>

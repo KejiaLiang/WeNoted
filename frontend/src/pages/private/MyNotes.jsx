@@ -31,7 +31,7 @@ function MyNotes(){
     // Get from the database the courses that my notes have
     //  + an "all courses" option. 
     // Subjected to selected semester. 
-    function getCourseOptions(){
+    function getCourseOptions(email, semester){
         // TODO: call db
         const courses = ["Comp307"];
         const noSelection = ["All Courses"];
@@ -41,10 +41,10 @@ function MyNotes(){
     // Get from the database the semesters that my notes have
     //  + an "all semesters" option.
     // Subjected to selected course.
-    function getSemesterOptions(){
+    function getSemesterOptions(email, course){
         // TODO: call db
         const semesters = ["Fall2026"];
-        const noSelection = ["All Semesters"];
+        const noSelection = ["all semesters"];
         return [...noSelection, ...semesters];
     }
 
@@ -67,14 +67,14 @@ function MyNotes(){
     }
 
     // Update course options according to the semester selected
-    async function updateCourses(){
-        const courses = await getCourseOptions();
+    async function updateCourses(email, semester){
+        const courses = await getCourseOptions(email, semester);
         setCourseOptions(courses);
     }
 
     // Update semester options according to the course selected
-    async function updateSemesters(){
-        const semesters = await getSemesterOptions();
+    async function updateSemesters(email, course){
+        const semesters = await getSemesterOptions(email, course);
         setSemesterOptions(semesters);
     }
 
