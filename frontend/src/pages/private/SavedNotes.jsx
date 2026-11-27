@@ -64,6 +64,7 @@ function SavedNotes(){
     async function getSavedNotes(email) {
         const response = await fetch(`/api/notes/saved-notes?email=${encodeURIComponent(email)}`, {
             method: 'GET',
+            cache: 'no-store'
         })
 
         if (!response.ok){
@@ -82,7 +83,7 @@ function SavedNotes(){
     // Subjected to selected semester. 
     async function getCourseOptions(email, semester){
         const response = await fetch(`/api/courses-and-semesters/getCoursesForSavedNotes?email=${encodeURIComponent(email)}&semester=${encodeURIComponent(semester)}`, {
-            method: 'GET',
+            method: 'GET'
         })
 
         if (!response.ok){
@@ -104,7 +105,7 @@ function SavedNotes(){
     // Subjected to selected course.
     async function getSemesterOptions(email, course){
         const response = await fetch(`/api/courses-and-semesters/getSemestersForSavedNotes?email=${encodeURIComponent(email)}&course=${encodeURIComponent(course)}`, {
-            method: 'GET',
+            method: 'GET'
         })
 
         if (!response.ok){
