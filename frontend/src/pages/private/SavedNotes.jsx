@@ -32,7 +32,7 @@ function SavedNotes(){
             } catch (error) {
             console.error(error);
             setActionError(error.message);
-        }
+            }
         }
         loadOptions();
     }, []);
