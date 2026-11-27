@@ -1,6 +1,6 @@
 /*
 Feature owner: Yuqing Zhou
-Code in this file was mostly copied (with adjustments) 
+Code in this file was mostly copied (with minor adjustments) 
 from Leon Song's Browse.css to keep the style consistent.
 */
 
@@ -26,4 +26,61 @@ header {
 .saved-notes-filters select {
     min-width: 0; width: 100%; min-height: 40px; background: white; 
     border: 1px solid #a9bbaa; border-radius: 6px; padding: 6px 9px; font-weight: 400;
+}
+
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+
+.card { display: flex; flex-direction: column; min-width: 0; 
+    border: 1px solid var(--line); border-radius: 12px; background: white; overflow: hidden; }
+
+.card-link { color: inherit; flex: 1; }
+
+.card-link:focus-visible { outline-offset: -3px; }
+
+.card-link:hover h2 { text-decoration: underline; text-underline-offset: 3px; }
+
+.thumb { height: clamp(116px, 11vw, 158px); display: grid; 
+    place-items: start center; overflow: hidden; padding: 14px 13% 0; 
+    background: #e6eee7; border-bottom: 1px solid var(--line); }
+
+.card:nth-child(3n + 2) .thumb { background: #f6ebe1; }
+
+.card:nth-child(3n + 3) .thumb { background: #e6edf1; }
+
+.thumb img { width: 100%; height: auto; box-shadow: 0 1px 6px #172d202b; }
+
+.thumb span { margin: auto; color: var(--muted); font-weight: 700; }
+
+.card-body { padding: 16px; overflow-wrap: anywhere; }
+
+.card-body h2 { margin: 8px 0; line-height: 1.2; }
+
+.card-actions { display: flex; gap: 3px; margin: 0 14px; 
+    padding: 4px 0; border-top: 1px solid var(--line); }
+
+.card-actions .compact { border: none; padding-inline: 7px; 
+    font-weight: 400; min-width: 38px; }
+
+.card-actions .compact:last-child { margin-left: auto; }
+
+.pager { display: flex; align-items: center; gap: 18px; 
+    justify-content: center; margin-top: 24px; }
+
+.display-notes > [role="alert"] { margin-bottom: 12px; }
+
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+@media (max-width: 760px) {
+  .browse { grid-template-columns: 1fr; }
+  .filters { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 16px; gap: 12px; }
+  .filters h2, .filters label:first-of-type { grid-column: 1/-1; }
+}
+
+@media (max-width: 520px) {
+  .main { padding-inline: 16px; }
+  .grid { grid-template-columns: 1fr; }
+
+  .thumb { height: 154px; padding-inline: 18%; }
+  .heading { gap: 8px; }
+  .heading { padding-inline: 10px; }
 }

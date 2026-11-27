@@ -163,30 +163,30 @@ function SavedNotes(){
                                     const detail = '/note-page?id=' + encodeURIComponent(note.id);
 
                                     return (
-                                        <article className="wn-card" key={note.id}>
-                                            <Link to={detail} className="wn-card-link">
-                                                <div className="wn-thumb">
+                                        <article className="card" key={note.id}>
+                                            <Link to={detail} className="card-link">
+                                                <div className="thumb">
                                                     {note.previewUrl
                                                         ? <img src={note.previewUrl} alt="" />
                                                         : <span>PDF</span>
                                                     }
                                                 </div>
 
-                                                <div className="wn-card-body">
-                                                    <p className="wn-course">
+                                                <div className="card-body">
+                                                    <p className="course">
                                                         {note.course} · {note.semester}
                                                         {note.section && ' · ' + note.section}
                                                     </p>
 
                                                     <h2>{note.title}</h2>
 
-                                                    <p className="wn-meta">
+                                                    <p className="meta">
                                                         {note.author} · {dateLabel(note.published)}
                                                     </p>
                                                 </div>
                                             </Link>
 
-                                            <div className="wn-card-actions">
+                                            <div className="card-actions">
                                                 <Reaction
                                                     kind="like"
                                                     compact
@@ -197,7 +197,7 @@ function SavedNotes(){
 
                                                 <Link
                                                     to={detail + '#comments'}
-                                                    className="wn-action compact"
+                                                    className="action compact"
                                                     aria-label={note.commentCount + ' comments on ' + note.title}
                                                 >
                                                     <Icon name="comment" />
