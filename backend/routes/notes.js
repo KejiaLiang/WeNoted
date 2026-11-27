@@ -3,8 +3,9 @@ const path = require('path');
 const multer = require('multer'); // to process files!
 const db = require('../db');
 const router = express.Router();
+const fs = require('fs');
 
-
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 
 // Configure where uploaded files are stored
@@ -18,10 +19,53 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: MAX_FILE_SIZE
+    }
+});
+
+//handle multer errors 
+function handleUpload(req, res, next) {
+    upload.single('file')(req, res, (err) => {
+
+        if (err instanceof multer.MulterError) {
+            if (err.code === 'LIMIT_FILE_SIZE') {
+                return res.status(400).json({
+                    error: 'File must be 10 MB or smaller'
+                });
+            }
+
+            return res.status(400).json({
+                error: 'File upload error'
+            });
+        }
+
+        if (err) {
+            return res.status(500).json({
+                error: 'Upload failed'
+            });
+        }
+
+        next();
+    });
+}
+
+async function deleteUploadedFile(filePath) {
+    if (filePath) {
+        try {
+            await fs.promises.unlink(filePath);
+        } catch (error) {
+            if (error.code !== 'ENOENT') {
+                console.error('Could not delete uploaded file:', error);
+            }
+        }
+    }
+}
 
 // UPLOAD NOTES
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', handleUpload, async (req, res) => {
     //to do: delete pdf if ticket not valid? 
    
      try{
@@ -39,6 +83,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     );
 
         if (result.length === 0) {
+            await deleteUploadedFile(req.file?.path); // ticket invalid, delete file
+
             return res.status(401).json({
                 error: 'Unauthorized'
             });
@@ -67,6 +113,9 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     
     }catch (error) {
         console.error(error);
+
+        // Delete uploaded file if something went wrong
+        await deleteUploadedFile(req.file?.path);
 
         res.status(500).json({
             error: 'Database error'
