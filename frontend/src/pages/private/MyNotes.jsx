@@ -251,10 +251,10 @@ function MyNotes(){
                         ) : (
                             <div className='grid'>
                                 {myNotes.map(note => {
-                                    const detail = '/note-page?id=' + encodeURIComponent(note_id);
+                                    const detail = '/note-page?id=' + encodeURIComponent(note.note_id);
 
                                     return (
-                                        <article className="card" key={note_id}>
+                                        <article className="card" key={note.note_id}>
                                             <Link to={detail} className="card-link">
                                                 <div className="thumb">
                                                     {note.previewUrl
