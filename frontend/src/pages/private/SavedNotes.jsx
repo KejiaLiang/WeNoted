@@ -74,6 +74,7 @@ function SavedNotes(){
         console.log("Response:", text);
         // debug
 
+        /*
         if (!response.ok){
             throw new Error(`Failed to get saved notes: ${response.status}`);
         }
@@ -83,6 +84,7 @@ function SavedNotes(){
         setData(notes);
 
         return notes;
+        */
     }
 
     // Get from the database the courses that the saved notes have
