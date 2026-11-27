@@ -4,8 +4,8 @@ const router = express.Router();
 
 
 
-
-//get username + email 
+//post ticket
+//sends response: email,first name, last name
 router.post('/getUser', async (req, res) => {
     try{
         //CHECK TICKET TO GET EMAIL
@@ -40,8 +40,28 @@ router.post('/getUser', async (req, res) => {
     }
 
 
-})
+});
 
+
+router.post('/logout', async (req,res) => {
+    try{
+        const ticket = req.body.ticket; 
+
+        const result = await db.query(
+            'DELETE FROM tickets WHERE ticket = ?' , [ticket]
+        );
+
+        res.json({
+            message : 'Successful'
+        })
+
+    }catch(error){
+        console.error(error);
+        res.status(500).json({
+            error: 'Database error when deleting ticket'
+        });
+    }
+});
 
 
 
