@@ -10,11 +10,20 @@ app.use(express.json());
 //Import routes
 const notesRoutes = require('./routes/notes');
 const userRoutes = require('./routes/users');
+const coursesSemestersRoute = require('./routes/courses-and-semesters');
 
 //register routes
 app.use('/api/notes', notesRoutes); 
 app.use('/api/auth', userRoutes); 
+app.use('/api/courses-and-semesters', coursesSemestersRoute);
 
+// Handle unmatched API requests
+app.use('/api', (req, res) => {
+    res.status(404).json({
+        error: 'API route not found',
+        path: req.originalUrl
+    });
+});
 
 //serve react 
 const buildpath = path.join(__dirname, '../frontend/dist');

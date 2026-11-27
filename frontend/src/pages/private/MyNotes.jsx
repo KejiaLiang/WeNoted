@@ -4,8 +4,8 @@ This file reuses the note-card layout from Leon's Browse.jsx (between <section> 
 */
 import {Link} from 'react-router-dom';
 import {useState, useEffect} from 'react';
-import { Icon, NoteLayout, Reaction, Status } from '../../notes/NoteUI';
-import { dateLabel, useNotes } from '../../notes/useNotes';
+import {Icon, NoteLayout, Reaction, Status} from '../../notes/NoteUI';
+import {dateLabel, useNotes} from '../../notes/useNotes';
 import './MyNotes.css';
 
 function MyNotes(){
@@ -16,36 +16,111 @@ function MyNotes(){
     const [semesterOptions, setSemesterOptions] = useState([]);
     const [actionError, setActionError] = useState('');
 
-    // TODO: replace this with a db call
-    const {data, error, retry, update, handleError} = useNotes();
+    const [email, setEmail] = useState('');
+
+    const [data, setData] = useState([]);
     
     // Set up course and semester options when the page loads
     useEffect(() => {
         async function loadOptions() {
-            updateCourses();
-            updateSemesters();
+            try {
+            const userEmail = await getCredentials();
+            await getMyNotes(userEmail);
+            await updateCourses(userEmail, "all semesters");
+            await updateSemesters(userEmail, "all courses");
+            } catch (error) {
+            console.error(error);
+            setActionError(error.message);
+            }
         }
         loadOptions();
     }, []);
 
+    // Get the user's email
+    async function getCredentials(){
+        const ticket= '123';
+
+        const response = await fetch('/api/auth/getUser', {
+            method: "POST",
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ticket})
+        })
+
+        if (!response.ok){
+            throw new Error(`Auth failed: ${response.status}`);
+        }
+
+        const user = await response.json();
+
+        setEmail(user.email);
+
+        return user.email;
+    }
+
+    // Get all my notes
+    async function getMyNotes(email) {
+        const response = await fetch(`/api/notes/my-notes?email=${encodeURIComponent(email)}`, {
+            method: 'GET',
+            cache: 'no-store'
+        })
+
+        if (!response.ok){
+            throw new Error(`Failed to get my notes: ${response.status}`);
+        }
+
+        const notes = await response.json();
+
+        setData(notes);
+
+        return notes;
+    }
+
     // Get from the database the courses that my notes have
     //  + an "all courses" option. 
     // Subjected to selected semester. 
-    function getCourseOptions(){
-        // TODO: call db
-        const courses = ["Comp307"];
+    async function getCourseOptions(email, semester){
+        const response = await fetch(`/api/courses-and-semesters/getCoursesForMyNotes?email=${encodeURIComponent(email)}&semester=${encodeURIComponent(semester)}`, {
+            method: 'GET',
+            cache: 'no-store'
+        })
+
+        if (!response.ok){
+            throw new Error(`Failed to get course options: ${response.status}`);
+        }
+
+        const courses = await response.json();
+
         const noSelection = ["All Courses"];
-        return [...noSelection, ...courses];
+
+        return [
+        ...noSelection,
+        ...courses.map(item => item.course_id)
+        ];
     }
 
     // Get from the database the semesters that my notes have
     //  + an "all semesters" option.
     // Subjected to selected course.
-    function getSemesterOptions(){
-        // TODO: call db
-        const semesters = ["Fall2026"];
+    async function getSemesterOptions(email, course){
+        const response = await fetch(`/api/courses-and-semesters/getSemestersForMyNotes?email=${encodeURIComponent(email)}&course=${encodeURIComponent(course)}`, {
+            method: 'GET',
+            cache: 'no-store'
+        })
+
+        if (!response.ok){
+            throw new Error(`Failed to get course options: ${response.status}`);
+        }
+
+        const semesters = await response.json();
+
         const noSelection = ["All Semesters"];
-        return [...noSelection, ...semesters];
+
+        return [
+        ...noSelection,
+        ...semesters.map(item => item.semester)
+        ];
     }
 
     // Create course options in html
@@ -67,15 +142,23 @@ function MyNotes(){
     }
 
     // Update course options according to the semester selected
-    async function updateCourses(){
-        const courses = await getCourseOptions();
-        setCourseOptions(courses);
+    async function updateCourses(email, semester){
+        try {
+            const courses = await getCourseOptions(email, semester);
+            setCourseOptions(courses);
+        } catch (error) {
+            setActionError(error.message);
+        }
     }
 
     // Update semester options according to the course selected
-    async function updateSemesters(){
-        const semesters = await getSemesterOptions();
-        setSemesterOptions(semesters);
+    async function updateSemesters(email, course){
+        try {
+            const semesters = await getSemesterOptions(email, course);
+            setSemesterOptions(semesters);
+        } catch (error) {
+            setActionError(error.message);
+        }
     }
 
     async function handleCourseChange(course){
@@ -99,15 +182,25 @@ function MyNotes(){
 
     const myNotes = (data || [])
         .filter(note =>
-            (course === "all courses" ||
-                note.course.toLowerCase() === course) &&
-            (semester === "all semesters" ||
-                note.semester.toLowerCase() === semester)
+            (course.toLowerCase() === "all courses" ||
+                note.course_id.toLowerCase() === course.toLowerCase()) &&
+            (semester.toLowerCase() === "all semesters" ||
+                note.semester.toLowerCase() === semester.toLowerCase())
         )
         .sort((a, b) => {
-            // TODO: split this into 2 cases based on input
-            return Date.parse(b.published) - Date.parse(a.published);
+        if (sort === "Most Liked") {
+            return b.num_likes - a.num_likes;
+        }
+
+        if (sort === "Most Recently Published") {
+            return Date.parse(b.publish_time) - Date.parse(a.publish_time);
+        }
+
+        return 0;
         });
+
+    // TODO: handle likes and comments
+    // TODO: page numbers and other formatting issues
 
     return(
         <div className='whole-page'>
@@ -118,7 +211,7 @@ function MyNotes(){
                     <h1>My Notes</h1>
                     {data && (
                         <p role="status">
-                            You have published {myNotes.length} {myNotes.length === 1 ? 'note' : 'notes'}:
+                            You have published {myNotes.length} {myNotes.length === 1 ? 'note' : 'notes'}
                         </p>
                     )}
                 </header>
@@ -151,37 +244,34 @@ function MyNotes(){
                 <section aria-label="display-notes" className="display-notes">
                     {actionError && <p role="alert">{actionError}</p>}
 
-                    {!data ? (
-                            <Status error={error} retry={retry} />
-                        ) : myNotes.length === 0 ? (
+                    {myNotes.length === 0 ? (
                             <div className="status">
                                 <h2>No notes found</h2>
                             </div>
                         ) : (
                             <div className='grid'>
                                 {myNotes.map(note => {
-                                    const detail = '/note-page?id=' + encodeURIComponent(note.id);
+                                    const detail = '/note-page?id=' + encodeURIComponent(note.note_id);
 
                                     return (
-                                        <article className="card" key={note.id}>
+                                        <article className="card" key={note.note_id}>
                                             <Link to={detail} className="card-link">
                                                 <div className="thumb">
                                                     {note.previewUrl
                                                         ? <img src={note.previewUrl} alt="" />
-                                                        : <span>PDF</span>
+                                                        : <span>PDF</span> // TODO: fix thumbnail
                                                     }
                                                 </div>
 
                                                 <div className="card-body">
                                                     <p className="course">
-                                                        {note.course} · {note.semester}
-                                                        {note.section && ' · ' + note.section}
+                                                        {note.course_id} · {note.semester}
                                                     </p>
 
                                                     <h2>{note.title}</h2>
 
                                                     <p className="meta">
-                                                        {note.author} · {dateLabel(note.published)}
+                                                        {note.publisher_fname} {note.publisher_lname} · {dateLabel(note.publish_time)}
                                                     </p>
                                                 </div>
                                             </Link>
@@ -198,10 +288,9 @@ function MyNotes(){
                                                 <Link
                                                     to={detail + '#comments'}
                                                     className="action compact"
-                                                    aria-label={note.commentCount + ' comments on ' + note.title}
+                                                    aria-label={'Comments on ' + note.title}
                                                 >
                                                     <Icon name="comment" />
-                                                    {note.commentCount}
                                                 </Link>
 
                                                 <Reaction

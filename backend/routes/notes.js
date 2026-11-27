@@ -75,7 +75,91 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     
 });
 
+// Get Saved Notes by Email
+router.get('/saved-notes', async (req, res) => {
+    try {
+        const email = req.query.email;
 
+        if (!email) {
+            return res.status(400).json({
+                error: 'Email Missing'
+            });
+        }
+
+        const result = await db.query(`
+            SELECT 
+                n.note_id,
+                n.title, 
+                n.course_id, 
+                n.semester, 
+                n.publisher_email, 
+                n.publish_time, 
+                n.filepath, 
+                n.description, 
+                n.num_likes,
+                s.save_time,
+                u.first_name AS publisher_fname,
+                u.last_name AS publisher_lname
+            FROM notes n 
+            INNER JOIN saves s ON n.note_id = s.note_id
+            LEFT JOIN users u ON u.email = n.publisher_email
+            WHERE s.email = ?
+            `, 
+            [email]
+        );
+
+        res.status(200).json(result);
+
+    }catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Database error'
+        });
+    }
+});
+
+// Get My Notes by Email
+router.get('/my-notes', async (req, res) => {
+    try {
+        const email = req.query.email;
+
+        if (!email) {
+            return res.status(400).json({
+                error: 'Email Missing'
+            });
+        }
+
+        const result = await db.query(`
+            SELECT 
+                n.note_id,
+                n.title, 
+                n.course_id, 
+                n.semester, 
+                n.publisher_email, 
+                n.publish_time, 
+                n.filepath, 
+                n.description, 
+                n.num_likes,
+                u.first_name AS publisher_fname,
+                u.last_name AS publisher_lname
+            FROM notes n
+            INNER JOIN users u ON u.email = n.publisher_email
+            WHERE u.email = ?
+            `, 
+            [email]
+        );
+
+        res.status(200).json(result);
+
+    }catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Database error'
+        });
+    }
+});
 
 
 
