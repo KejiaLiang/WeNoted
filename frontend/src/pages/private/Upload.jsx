@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 
 function Upload(){
 
+    const navigate = useNavigate();
+
+
     //right fct sets left var
     const [dragOver, setDragOver] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -112,7 +115,6 @@ function Upload(){
     //upload
     async function handleUpload(event){
         event.preventDefault();
-        const navigate = useNavigate();
 
         //make sure to have pdf
         if (!selectedFile){
@@ -136,7 +138,7 @@ function Upload(){
         // all input will be accessible as  req.body.title, req.body.semester,..etc but file is accessed as: req.file
        //ticket is req.body.ticket
         //send to server
-        const response = await fetch('/upload', {
+        const response = await fetch('/api/notes/upload', {
             method: 'POST',
             body: formData
         })
@@ -146,10 +148,10 @@ function Upload(){
         }
 
         const result = await response.json(); 
-        const node_id = result.note_id;
+        const note_id = result.note_id;
 
         if (result.message == 'Successful'){
-            navigate(`/notes/${note_id}`);
+            navigate(`/note-page/${note_id}`);
         }
 
     }

@@ -18,7 +18,7 @@ router.post('/getUser', async (req, res) => {
 
         if (result.length === 0) {
             return res.status(404).json({
-                error: 'Ticket not found'
+                error: 'User not found'
             });
         }
 

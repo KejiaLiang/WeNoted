@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // UPLOAD NOTES
-router.post('/api/notes/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', upload.single('file'), async (req, res) => {
     //to do: delete pdf if ticket not valid? 
    
      try{
@@ -58,7 +58,7 @@ router.post('/api/notes/upload', upload.single('file'), async (req, res) => {
               [title, course, semester, email, file.path, description]
         );
 
-        const note_id = uploadResult.insertId; //get the note_ID from the inserted record
+        const note_id = uploadResult.insertId.toString(); //get the note_ID from the inserted record
 
         res.json({
         note_id: note_id, 
