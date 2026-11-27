@@ -82,7 +82,8 @@ function MyNotes(){
     // Subjected to selected semester. 
     async function getCourseOptions(email, semester){
         const response = await fetch(`/api/courses-and-semesters/getCoursesForMyNotes?email=${encodeURIComponent(email)}&semester=${encodeURIComponent(semester)}`, {
-            method: 'GET'
+            method: 'GET',
+            cache: 'no-store'
         })
 
         if (!response.ok){
@@ -104,7 +105,8 @@ function MyNotes(){
     // Subjected to selected course.
     async function getSemesterOptions(email, course){
         const response = await fetch(`/api/courses-and-semesters/getSemestersForMyNotes?email=${encodeURIComponent(email)}&course=${encodeURIComponent(course)}`, {
-            method: 'GET'
+            method: 'GET',
+            cache: 'no-store'
         })
 
         if (!response.ok){
@@ -186,8 +188,8 @@ function MyNotes(){
                 note.semester.toLowerCase() === semester.toLowerCase())
         )
         .sort((a, b) => {
-        if (sort === "Most Recently Saved") {
-            return Date.parse(b.save_time) - Date.parse(a.save_time);
+        if (sort === "Most Liked") {
+            return b.num_likes - a.num_likes;
         }
 
         if (sort === "Most Recently Published") {
