@@ -4,3 +4,4 @@
 | Database setup | Landing page | Browse page | Register |
 | Saved notes page | Upload page | Notes Page | Login |
 | My Notes page | Navbar/footer | | |
+| My Notes page | Frontend/Backend setup | | |
