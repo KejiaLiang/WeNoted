@@ -1,3 +1,9 @@
+/*
+Kejia Liang, 261180895
+
+*/
+
+
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import PrivateNav from '../../components/PrivateNav'; 
@@ -175,6 +181,7 @@ function Upload(){
                             <select name='course' required>
                                 <option value="" disabled selected>Select course</option>
                                 <option value="comp307">comp307</option>
+                                <option value="comp303">comp307</option>
 
                             </select>
                         </div>
@@ -184,6 +191,7 @@ function Upload(){
                             <select name='semester' required>
                                 <option value="" disabled selected>Select semester</option>
                                 <option value="fall2026">Fall 2026</option>
+                                <option value="fall2025">Fall 2026</option>
                             </select>
                         </div>
                         
